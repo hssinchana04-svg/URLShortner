@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ShortCut | Premium URL Shortener & Analytics</title>
+  <meta name="description" content="Shorten, share, and track your links with detailed real-time analytics, custom aliases, QR codes, and temporary expiration.">
+  
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Outfit:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+  
+  <!-- Chart.js -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom Stylesheets -->
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- Dynamic Glowing Background Blobs -->
+  <div class="bg-glow blob-1"></div>
+  <div class="bg-glow blob-2"></div>
+  <div class="bg-glow blob-3"></div>
+
+  <!-- Navigation Bar -->
+  <nav class="navbar glass">
+    <div class="nav-container">
+      <a href="/" class="brand" id="nav-logo">
+        <div class="logo-icon"><i class="fa-solid fa-link"></i></div>
+        <span>Short<span class="text-accent">Cut</span></span>
+      </a>
+      
+      <!-- Nav Menu -->
+      <div class="nav-menu" id="nav-menu">
+        <a href="/" class="nav-link active" id="link-home"><i class="fa-solid fa-house"></i> Home</a>
+        <a href="/dashboard" class="nav-link hidden" id="link-dashboard"><i class="fa-solid fa-chart-simple"></i> Dashboard</a>
+        
+        <!-- Auth status dependent links -->
+        <div class="nav-auth-buttons" id="nav-auth-buttons">
+          <button class="btn btn-secondary btn-sm" id="btn-nav-login">Log In</button>
+          <button class="btn btn-primary btn-sm" id="btn-nav-signup">Sign Up</button>
+        </div>
+
+        <div class="nav-user-profile hidden" id="nav-user-profile">
+          <span class="user-greeting" id="user-greeting">Hi, User</span>
+          <button class="btn btn-icon-only" id="btn-nav-logout" title="Log Out"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+      </div>
+      
+      <!-- Mobile Toggle -->
+      <button class="mobile-toggle" id="mobile-toggle">
+        <i class="fa-solid fa-bars"></i>
+      </button>
+    </div>
+  </nav>
+
+  <!-- Notification Toast Container -->
+  <div class="toast-container" id="toast-container"></div>
+
+  <!-- Main View Container -->
+  <main class="view-container" id="view-container">
+
+    <!-- LANDING / HERO VIEW -->
+    <section class="view active" id="view-landing">
+      <div class="hero-section">
+        <span class="badge-pill">Premium Link Management</span>
+        <h1 class="hero-title">Shorten Your Links,<br>Expand Your <span class="text-gradient">Reach</span>.</h1>
+        <p class="hero-subtitle">Optimize your digital footprints. ShortCut provides lightning-fast redirection, beautiful QR codes, customizable aliases, and robust analytics tools.</p>
+        
+        <!-- Quick URL Shortener Form (Prompts login on submit) -->
+        <div class="quick-shorten-box glass">
+          <form id="form-quick-shorten" class="shorten-form">
+            <div class="input-group">
+              <i class="fa-solid fa-link input-icon"></i>
+              <input type="url" id="input-quick-url" placeholder="Paste your long link here..." required>
+              <button type="submit" class="btn btn-primary">Shorten <i class="fa-solid fa-arrow-right"></i></button>
+            </div>
+          </form>
+          <p class="quick-shorten-tip"><i class="fa-solid fa-shield-halved"></i> Creating a free account allows custom aliases, expiry rules, and click tracking.</p>
+        </div>
+      </div>
+
+      <!-- Features Section -->
+      <div class="features-grid">
+        <div class="feature-card glass hover-lift">
+          <div class="feature-icon bg-blue"><i class="fa-solid fa-gauge-high"></i></div>
+          <h3>Advanced Analytics</h3>
+          <p>Track click frequencies, geographic referrals, browsers, operating systems, and timestamp distributions in real-time.</p>
+        </div>
+        <div class="feature-card glass hover-lift">
+          <div class="feature-icon bg-purple"><i class="fa-solid fa-qrcode"></i></div>
+          <h3>QR Code Generation</h3>
+          <p>Every shortened link automatically constructs a clean, high-resolution QR Code perfect for physical flyers or social media.</p>
+        </div>
+        <div class="feature-card glass hover-lift">
+          <div class="feature-icon bg-emerald"><i class="fa-solid fa-signature"></i></div>
+          <h3>Custom Aliases</h3>
+          <p>Enhance branding with recognizable custom short keywords instead of random strings to boost CTR by up to 34%.</p>
+        </div>
+        <div class="feature-card glass hover-lift">
+          <div class="feature-icon bg-orange"><i class="fa-solid fa-hourglass-half"></i></div>
+          <h3>Link Expiry</h3>
+          <p>Schedule automatic deletion or expiry on specific dates. Create temporary promotional campaigns or time-sensitive shares.</p>
+        </div>
+      </div>
+    </section>
+
+    <!-- AUTHENTICATION VIEW -->
+    <section class="view" id="view-auth">
+      <div class="auth-card-wrapper">
+        <div class="auth-card glass">
+          <!-- Auth Tabs -->
+          <div class="auth-tabs">
+            <button class="auth-tab-btn active" id="tab-login">Log In</button>
+            <button class="auth-tab-btn" id="tab-signup">Create Account</button>
+          </div>
+
+          <!-- Login Form -->
+          <form id="form-login" class="auth-form active">
+            <h2>Welcome Back</h2>
+            <p class="auth-desc">Enter your credentials to manage your short links.</p>
+            
+            <div class="form-group">
+              <label for="login-email">Email Address</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-envelope form-icon"></i>
+                <input type="email" id="login-email" required placeholder="name@domain.com">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="login-password">Password</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-lock form-icon"></i>
+                <input type="password" id="login-password" required placeholder="Min. 6 characters">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="btn-login-submit">
+              <span>Log In</span> <i class="fa-solid fa-right-to-bracket"></i>
+            </button>
+          </form>
+
+          <!-- Signup Form -->
+          <form id="form-signup" class="auth-form">
+            <h2>Start Shortening</h2>
+            <p class="auth-desc">Create a free account to unlock premium URL features.</p>
+
+            <div class="form-group">
+              <label for="signup-name">Full Name</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-user form-icon"></i>
+                <input type="text" id="signup-name" required placeholder="John Doe">
+              </div>
+            </div>
+            
+            <div class="form-group">
+              <label for="signup-email">Email Address</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-envelope form-icon"></i>
+                <input type="email" id="signup-email" required placeholder="name@domain.com">
+              </div>
+            </div>
+
+            <div class="form-group">
+              <label for="signup-password">Password</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-lock form-icon"></i>
+                <input type="password" id="signup-password" required placeholder="Min. 6 characters">
+              </div>
+            </div>
+
+            <button type="submit" class="btn btn-primary btn-block" id="btn-signup-submit">
+              <span>Create Free Account</span> <i class="fa-solid fa-user-plus"></i>
+            </button>
+          </form>
+        </div>
+      </div>
+    </section>
+
+    <!-- DASHBOARD VIEW -->
+    <section class="view" id="view-dashboard">
+      <!-- Welcome Header -->
+      <div class="dashboard-header">
+        <div>
+          <h1 class="dashboard-title">Your Workspace</h1>
+          <p class="dashboard-subtitle">Create, monitor, and configure your shortened links.</p>
+        </div>
+        <button class="btn btn-primary" id="btn-new-link"><i class="fa-solid fa-plus"></i> Shorten URL</button>
+      </div>
+
+      <!-- Quick Stats Grid -->
+      <div class="stats-grid">
+        <div class="stat-card glass">
+          <div class="stat-info">
+            <span class="stat-label">Total Links</span>
+            <h2 class="stat-value" id="stat-total-links">0</h2>
+          </div>
+          <div class="stat-icon bg-blue-tint"><i class="fa-solid fa-link"></i></div>
+        </div>
+        <div class="stat-card glass">
+          <div class="stat-info">
+            <span class="stat-label">Total Clicks</span>
+            <h2 class="stat-value" id="stat-total-clicks">0</h2>
+          </div>
+          <div class="stat-icon bg-purple-tint"><i class="fa-solid fa-eye"></i></div>
+        </div>
+        <div class="stat-card glass">
+          <div class="stat-info">
+            <span class="stat-label">Active Links</span>
+            <h2 class="stat-value" id="stat-active-links">0</h2>
+          </div>
+          <div class="stat-icon bg-emerald-tint"><i class="fa-solid fa-circle-check"></i></div>
+        </div>
+      </div>
+
+      <!-- Main Workspace Section -->
+      <div class="workspace-layout">
+        
+        <!-- Shorten URL Modal Form (or slide-down panel) -->
+        <div class="shortener-panel glass hidden" id="shortener-panel">
+          <div class="panel-header">
+            <h3><i class="fa-solid fa-wand-magic-sparkles"></i> Shorten a New URL</h3>
+            <button class="btn-close" id="btn-close-shortener"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+          
+          <form id="form-shorten">
+            <div class="form-group">
+              <label for="shorten-url">Original Long URL</label>
+              <div class="input-wrapper">
+                <i class="fa-solid fa-link form-icon"></i>
+                <input type="url" id="shorten-url" required placeholder="https://example.com/very-long-path/page">
+              </div>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="shorten-alias">Custom Alias (Optional)</label>
+                <div class="input-wrapper">
+                  <i class="fa-solid fa-signature form-icon"></i>
+                  <input type="text" id="shorten-alias" placeholder="e.g. promo2026">
+                </div>
+                <small class="form-help">Only letters, numbers, hyphens, and underscores.</small>
+              </div>
+
+              <div class="form-group">
+                <label for="shorten-expiry">Link Expiry</label>
+                <div class="input-wrapper">
+                  <i class="fa-solid fa-clock-rotate-left form-icon"></i>
+                  <select id="shorten-expiry">
+                    <option value="never" selected>Never Expire</option>
+                    <option value="1">Expire in 1 Day</option>
+                    <option value="7">Expire in 7 Days</option>
+                    <option value="30">Expire in 30 Days</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="button" class="btn btn-secondary" id="btn-cancel-shorten">Cancel</button>
+              <button type="submit" class="btn btn-primary" id="btn-shorten-submit">Shorten Link</button>
+            </div>
+          </form>
+        </div>
+
+        <!-- Links List Grid/Table -->
+        <div class="links-panel glass">
+          <div class="links-header">
+            <h3>Your Shortened URLs</h3>
+            <div class="search-bar">
+              <i class="fa-solid fa-magnifying-glass search-icon"></i>
+              <input type="text" id="input-search-links" placeholder="Search by link or alias...">
+            </div>
+          </div>
+
+          <!-- Empty State -->
+          <div class="empty-state" id="empty-state">
+            <div class="empty-icon"><i class="fa-regular fa-folder-open"></i></div>
+            <h4>No shortened URLs yet</h4>
+            <p>Paste a long link above to generate your first tracked shortcut.</p>
+            <button class="btn btn-primary btn-sm" id="btn-empty-shorten">Get Started</button>
+          </div>
+
+          <!-- Links Container -->
+          <div class="links-list" id="links-list">
+            <!-- Dynamic Link Items Go Here -->
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DETAILED ANALYTICS VIEW -->
+    <section class="view" id="view-analytics">
+      <!-- Back Button & Header -->
+      <div class="analytics-header">
+        <button class="btn btn-secondary btn-sm" id="btn-back-dashboard"><i class="fa-solid fa-arrow-left"></i> Back to Workspace</button>
+        <div class="analytics-title-area">
+          <h1 class="analytics-title">Link Intelligence</h1>
+          <p class="analytics-subtitle" id="analytics-short-url">shortcut.com/xyz</p>
+        </div>
+      </div>
+
+      <!-- Quick Details & QR Code Side-by-Side -->
+      <div class="analytics-top-grid">
+        <!-- Details Card -->
+        <div class="analytics-card glass details-card">
+          <div class="card-title-badge">
+            <h3><i class="fa-solid fa-circle-info"></i> Link Parameters</h3>
+            <span class="status-indicator active" id="analytics-status">Active</span>
+          </div>
+          
+          <div class="parameter-row">
+            <span class="param-label">Original Link:</span>
+            <a href="#" target="_blank" class="param-value text-accent" id="analytics-original-url">https://domain.com/very-long-url</a>
+          </div>
+          <div class="parameter-row">
+            <span class="param-label">Short Code:</span>
+            <span class="param-value font-mono" id="analytics-code">xyz</span>
+          </div>
+          <div class="parameter-row">
+            <span class="param-label">Created On:</span>
+            <span class="param-value" id="analytics-created">July 7, 2026</span>
+          </div>
+          <div class="parameter-row">
+            <span class="param-label">Expires At:</span>
+            <span class="param-value" id="analytics-expires">Never</span>
+          </div>
+          <div class="parameter-row">
+            <span class="param-label">Total Engagements:</span>
+            <span class="param-value font-semibold text-gradient" id="analytics-clicks">0 clicks</span>
+          </div>
+        </div>
+
+        <!-- QR Code Card -->
+        <div class="analytics-card glass qr-card">
+          <h3><i class="fa-solid fa-qrcode"></i> Target QR Code</h3>
+          <p class="card-desc">Scan or download this code to share this redirect link physically.</p>
+          <div class="qr-code-wrapper">
+            <img src="" alt="QR Code" id="analytics-qrcode-img" class="qr-code-img">
+          </div>
+          <button class="btn btn-secondary btn-block btn-sm" id="btn-download-qrcode"><i class="fa-solid fa-download"></i> Download QR (PNG)</button>
+        </div>
+      </div>
+
+      <!-- Click Over Time Chart -->
+      <div class="analytics-card glass chart-card">
+        <h3><i class="fa-solid fa-chart-line"></i> Engagement Analytics</h3>
+        <p class="card-desc">Volume of redirects tracked over the past few active days.</p>
+        <div class="chart-container">
+          <canvas id="chart-clicks"></canvas>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer -->
+  <footer class="footer">
+    <p>© 2026 ShortCut Inc. Handcrafted with vanilla CSS and passion.</p>
+  </footer>
+
+  <!-- App Script -->
+  <script src="app.js"></script>
+</body>
+</html>
